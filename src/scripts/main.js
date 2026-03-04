@@ -10,6 +10,7 @@ const messageStart = document.querySelector('.message-start');
 const messageLose = document.querySelector('.message-lose');
 const messageWin = document.querySelector('.message-win');
 
+
 function updateUI() {
   const flatBoard = game.board.flat();
 
@@ -19,13 +20,22 @@ function updateUI() {
     cell.textContent = value === 0 ? '' : value;
 
     cell.setAttribute('data-value', value);
+
+    cell.className = 'field-cell';
+
+    if (value > 0) {
+      cell.classList.add(`field-cell--${value}`);
+    }
   });
 
   scoreElement.textContent = game.score;
 
+  messageLose.classList.add('hidden');
+  messageWin.classList.add('hidden');
+
   if (game.status === 'lose') {
     messageLose.classList.remove('hidden');
-  } else if (game.status === 'won') {
+  } else if (game.status === 'win') {
     messageWin.classList.remove('hidden');
   }
 
@@ -42,9 +52,11 @@ function updateUI() {
 
 startBtn.addEventListener('click', () => {
   game.restart();
+  
   messageStart.classList.add('hidden');
   messageLose.classList.add('hidden');
   messageWin.classList.add('hidden');
+  
   updateUI();
 });
 
@@ -55,20 +67,21 @@ window.addEventListener('keydown', (e) => {
 
   const oldBoard = JSON.stringify(game.board);
 
-  if (e.key === 'ArrowLeft') {
-    game.moveLeft();
-  }
-
-  if (e.key === 'ArrowRight') {
-    game.moveRight();
-  }
-
-  if (e.key === 'ArrowUp') {
-    game.moveUp();
-  }
-
-  if (e.key === 'ArrowDown') {
-    game.moveDown();
+  switch (e.key) {
+    case 'ArrowLeft':
+      game.moveLeft();
+      break;
+    case 'ArrowRight':
+      game.moveRight();
+      break;
+    case 'ArrowUp':
+      game.moveUp();
+      break;
+    case 'ArrowDown':
+      game.moveDown();
+      break;
+    default:
+      return; 
   }
 
   if (oldBoard !== JSON.stringify(game.board)) {
