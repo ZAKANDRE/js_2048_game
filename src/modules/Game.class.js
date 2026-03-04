@@ -158,7 +158,7 @@ export class Game {
     }
 
     if (this.board.flat().includes(0)) {
-      return; 
+      return;
     }
 
     for (let r = 0; r < 4; r++) {
